@@ -21,3 +21,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('paraderos', 'ParaderoController@index');
 Route::get('pasantias/{codigo}', 'ParaderoController@pasantiaAvailable');
 Route::post('alumnoposicion','ParaderoController@streamingAlumnoUbicacion');
+Route::get('alumno/{codigo}','AlumnoController@show');

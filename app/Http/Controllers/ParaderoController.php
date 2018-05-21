@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Paradero;
+use App\Alumno;
+
 use App\Http\Resources\Paradero as ParaderoResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
@@ -36,35 +38,21 @@ class ParaderoController extends Controller
     public function streamingAlumnoUbicacion(Request $request){
         date_default_timezone_set("America/Lima");
         $time = date("Y-m-d H:i:s");
-        $idregistro = $request->idubicacion;
+        $idregistro = $request->idregistro_posicion;
         if($idregistro == ''){
             $ubicacion = new Posicion();
-            $ubicacion->ubicacion = $request->ubicacion;
+            $ubicacion->ubicacion = $request->idregistro_posicion;
             $ubicacion->fecha_hora = $time;
-            $query = collect(DB::table('alumno')
-                ->select('idalumno')
-                ->where('codigo','=',$request->codigo)
-                ->get());
-            $arr = array();
-            foreach ($query as $q) {
-                $arr = (array) $q;
-            }
-            $ubicacion->alumno_idalumno = $arr["idalumno"]; 
+            $idalumno = Alumno::select('idalumno')->where('codigo',$request->codigo)->get();
+            $ubicacion->alumno_idalumno = $idalumno[0]->idalumno;
             $ubicacion->save();
             echo $ubicacion->idalumno_posicion;
         }else{
-            $ubicacion = Posicion::find($request->idubicacion);
+            $ubicacion = Posicion::find($request->idregistro_posicion);
             $ubicacion->ubicacion = $request->ubicacion;
             $ubicacion->fecha_hora = $time;
-            $query = collect(DB::table('alumno')
-                ->select('idalumno')
-                ->where('codigo','=',$request->codigo)
-                ->get());
-            $arr = array();
-            foreach ($query as $q) {
-                $arr = (array) $q;
-            }
-            $ubicacion->alumno_idalumno = $arr["idalumno"]; 
+            $idalumno = Alumno::select('idalumno')->where('codigo',$request->codigo)->get();
+            $ubicacion->alumno_idalumno = $idalumno[0]->idalumno;
             $ubicacion->save();
             echo $ubicacion->idalumno_posicion;
         }

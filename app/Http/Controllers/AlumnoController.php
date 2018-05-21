@@ -44,9 +44,14 @@ class AlumnoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($codigo)
     {
-        //
+        try{
+                $alumno = Alumno::where('codigo',$codigo)->get();
+                echo $alumno[0]->idalumno;
+        }catch(\Exception $e){
+                echo "No existe el alumno";
+        }
     }
 
     /**
