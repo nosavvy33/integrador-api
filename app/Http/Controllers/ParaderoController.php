@@ -35,6 +35,7 @@ class ParaderoController extends Controller
         echo json_encode($arr);
     }
 
+
     public function streamingAlumnoUbicacion(Request $request){
         date_default_timezone_set("America/Lima");
         $time = date("Y-m-d H:i:s");
