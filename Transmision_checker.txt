@@ -1,0 +1,47 @@
+
+//CREA EL PROCEDURE
+
+delimiter //
+
+CREATE PROCEDURE check_transmision ()
+    BEGIN
+    declare state varchar(25);
+    declare timing datetime;
+    declare ending datetime;
+    declare identi int;
+    declare space int;
+DECLARE done TINYINT DEFAULT FALSE;
+    declare curso cursor for select idbus_posicion, final, hora_ubicacion, estado from bus_posicion where estado='ACTIVO';
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    open curso;
+    checking_life: loop
+    fetch curso into identi, ending, timing, state;
+    set space = time_to_sec(timediff(now(),timing));
+    if(space>5) then
+    update bus_posicion set bus_posicion.estado="TERMINADO", bus_posicion.final = now() where idbus_posicion=identi;
+    end if;
+    if done then
+    leave checking_life;
+    end if;
+    end loop checking_life;
+    END//
+ delimiter ;
+
+//EJECUTAS UNA VEZ Y PRUEBAS CON UNA ENTRADA
+ call check_transmision();
+
+//POR SI TE HUEVEAS XD
+ drop procedure check_transmision;
+
+
+//CREAR EVENTO
+ CREATE EVENT bus_posicion_checker ON SCHEDULE EVERY 5 SECOND DO CALL check_transmision();
+
+
+//VER EVENTOS
+ show processlist;
+
+
+//VARIABLES NECESARIAS DE EJECUTAR EN MYSQL PARA QUE FUNCIONE EL PROCEDURE
+ set global event_scheduler = ON;
+ set global time_zone = '-5:00';
