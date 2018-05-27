@@ -25,13 +25,26 @@ Route::get('pasantias/{codigo}', 'ParaderoController@pasantiaAvailable');
 Route::post('alumnoposicion','ParaderoController@streamingAlumnoUbicacion');
 //obtener datos del alumno segun su codigo {codigo}
 Route::get('alumno/{codigo}','AlumnoController@show');
+Route::get('paradero/show/{id}','ParaderoController@show');
+Route::post('paradero/store','ParaderoController@store');
+Route::get('paradero/destroy/{id}','ParaderoController@destroy');
+/*
+ set global event_scheduler = ON;
+ set global time_zone = '-5:00';
+ */
 
 //TODO
 //CRUD DE PASANTIA
+Route::get('pasantia','PasantiaController@index');
+Route::get('pasantia/show/{id}','PasantiaController@show');
+Route::post('pasantia/store','PasantiaController@store');
+Route::get('pasantia/destroy/{id}','PasantiaController@destroy');
+Route::post('pasantia/update','PasantiaController@update');
 //CRUD DE BUSES
 Route::get('bus','BusController@index');
 Route::post('bus/store','BusController@store');
 Route::get('bus/destroy/{id}','BusController@destroy');
 Route::get('bus/show/{id}','BusController@show');
 Route::post('bus/update','BusController@update');
-//CRUD DE PARADEROS (CRUD DE RUTAS EN SPRING)
+Route::post('bus/search','BusController@searchOne');
+Route::post('bus/busposicion','BusController@streamingBus');

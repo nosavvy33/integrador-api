@@ -8,4 +8,5 @@ class Paradero extends Model
 {
     protected $table = 'paradero';
     protected $primaryKey = 'idparadero';
+    public $timestamps = false;
 }

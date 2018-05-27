@@ -4,8 +4,57 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Bus;
+use App\BusPosicion as Posicion;
 class BusController extends Controller
 {
+
+    public function streamingBus(Request $request){
+    try{
+    if(!$request->has('ubicacion') || !$request->has('idbus') || !$request->has('idparadero')){
+        throw new \Exception("Se esperaba campos obligatorios");
+    }
+    date_default_timezone_set("America/Lima");
+    $time = date("Y-m-d H:i:s");
+    if($request->idregistro == ''){
+        $ubicacion = new Posicion();
+        $ubicacion->inicio = $time;
+        $ubicacion->ubicacion = $request->input('ubicacion');
+        $ubicacion->estado = 'ACTIVO';
+        $ubicacion->bus_idbus = $request->input('idbus');
+        $ubicacion->paradero_idparadero = $request->input('idparadero');
+        $ubicacion->save();
+        echo $ubicacion->idbus_posicion;
+    }else{
+        if(!$request->has('idregistro')){
+            throw new \Exception("Se esperaba campos obligatorios");
+        }
+        $ubicacion = Posicion::find($request->idregistro);
+        $ubicacion->ubicacion = $request->input('ubicacion');
+        $ubicacion->estado = 'ACTIVO';
+        $ubicacion->bus_idbus = $request->input('idbus');
+        $ubicacion->paradero_idparadero = $request->input('idparadero');
+        $ubicacion->hora_ubicacion = $time;
+        $ubicacion->save();
+        echo $ubicacion->idbus_posicion;
+    }
+    }catch(\Exception $e){
+        return response()->json(['type'=>'error','message'=>$e->getMessage()],500);
+
+    }
+    }
+
+
+    public function searchOne(Request $request){
+        try{
+    if(!$request->has('placa')){
+    throw new \Exception("Se esperaba campos obligatorios");
+    }
+    $bus = Bus::select('idbus')->where('placa','=',$request->placa)->get();
+    echo $bus;
+        }catch(\Exception $e){
+        return response()->json(['type'=>'error','message'=>$e->getMessage()],500);
+        }
+    }
     /**
      * Display a listing of the resource.
      *

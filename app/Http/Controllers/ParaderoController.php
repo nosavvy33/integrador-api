@@ -64,10 +64,6 @@ class ParaderoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -77,7 +73,19 @@ class ParaderoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+        if(!$request->has('nombre') || !$request->has('ubicacion') || !$request->has('hora_partida')){
+                throw new \Exception('Se esperaba campos obligatorios');
+        }
+        $paradero = new Paradero();
+        $paradero->nombre = $request->input('nombre');
+        $paradero->ubicacion  = $request->input('ubicacion');
+        $paradero->hora_partida  = $request->input('hora_partida');
+        $paradero->save();
+             return response()->json($paradero,200 );
+         }catch(\Exception $e){
+            return response()->json(['type'=>'error','message'=>$e->getMessage()],500);
+        }
     }
 
     /**
@@ -88,7 +96,8 @@ class ParaderoController extends Controller
      */
     public function show($id)
     {
-        //
+        $paradero = Paradero::find($id);
+        return response()->json($paradero,200 );
     }
 
     /**
@@ -99,7 +108,19 @@ class ParaderoController extends Controller
      */
     public function edit($id)
     {
-        //
+        try{
+        if(!$request->has('nombre') || !$request->has('ubicacion') || !$request->has('hora_partida') || !$request->has('idparadero')){
+                throw new \Exception('Se esperaba campos obligatorios');
+        }
+        $paradero = Paradero::find($request->idparadero);
+        $paradero->nombre = $request->input('nombre');
+        $paradero->ubicacion  = $request->input('ubicacion');
+        $paradero->hora_partida  = $request->input('hora_partida');
+        $paradero->save();
+             return response()->json($paradero,200 );
+         }catch(\Exception $e){
+            return response()->json(['type'=>'error','message'=>$e->getMessage()],500);
+        }
     }
 
     /**
@@ -122,6 +143,8 @@ class ParaderoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $paradero =  Paradero::destroy($id);
+            return response()->json(["message" => "Eliminado correctamente"],200 );
+
     }
 }
