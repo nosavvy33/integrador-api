@@ -74,13 +74,13 @@ class ParaderoController extends Controller
     public function store(Request $request)
     {
         try{
-        if(!$request->has('nombre') || !$request->has('ubicacion') || !$request->has('hora_partida')){
+        if(!$request->has('nombre') || !$request->has('ubicacion') || !$request->has('horapartida')){
                 throw new \Exception('Se esperaba campos obligatorios');
         }
         $paradero = new Paradero();
         $paradero->nombre = $request->input('nombre');
         $paradero->ubicacion  = $request->input('ubicacion');
-        $paradero->hora_partida  = $request->input('hora_partida');
+        $paradero->horapartida  = $request->input('horapartida');
         $paradero->save();
              return response()->json($paradero,200 );
          }catch(\Exception $e){
@@ -109,13 +109,13 @@ class ParaderoController extends Controller
     public function edit($id)
     {
         try{
-        if(!$request->has('nombre') || !$request->has('ubicacion') || !$request->has('hora_partida') || !$request->has('idparadero')){
+        if(!$request->has('nombre') || !$request->has('ubicacion') || !$request->has('horapartida') || !$request->has('idparadero')){
                 throw new \Exception('Se esperaba campos obligatorios');
         }
         $paradero = Paradero::find($request->idparadero);
         $paradero->nombre = $request->input('nombre');
         $paradero->ubicacion  = $request->input('ubicacion');
-        $paradero->hora_partida  = $request->input('hora_partida');
+        $paradero->horapartida  = $request->input('horapartida');
         $paradero->save();
              return response()->json($paradero,200 );
          }catch(\Exception $e){
